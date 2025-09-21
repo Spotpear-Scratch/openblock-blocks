@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python2.7
 # Compresses the core Blockly files into a single JavaScript file.
 #
 # Copyright 2012 Google Inc.
@@ -473,8 +473,6 @@ class Gen_compressed(threading.Thread):
 
       compiledCode = json_data["compiledCode"]
 
-      #print("DEBUG COMPILED CODE:")
-      #print(compiledCode)
       compiledCode = compiledCode.decode('utf-8')
       if (compiledCode.find("new Blockly.Generator") != -1):
         code = HEADER + "\nlet Blockly = require(\'openblock-blocks\');\n\n" + compiledCode
@@ -624,7 +622,7 @@ if __name__ == "__main__":
     # Load calcdeps from the local library
     calcdeps = import_path(os.path.join(
         closure_root, closure_library, "closure", "bin", "calcdeps.py"))
-
+    
     # Sanity check the local compiler
     test_args = [closure_compiler, os.path.join("build", "test_input.js")]
     if(os.name == "nt"):
@@ -633,6 +631,8 @@ if __name__ == "__main__":
       test_proc = subprocess.Popen(test_args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     (stdout, _) = test_proc.communicate()
     file = read(os.path.join("build", "test_expect.js"))
+    print(stdout)
+    print(file.encode('utf-8'))
     assert stdout == file.encode('utf-8')
 
     print(("Using local compiler: %s ...\n" % CLOSURE_COMPILER_NPM))
@@ -665,10 +665,9 @@ if __name__ == "__main__":
 
   search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(closure_root, closure_library)])
-
-  search_paths_horizontal = list(filter(exclude_vertical, search_paths))
-  search_paths_vertical = list(filter(exclude_horizontal, search_paths))
-
+  _search_paths = list(search_paths)
+  search_paths_horizontal = list(filter(exclude_vertical, _search_paths ))
+  search_paths_vertical = list(filter(exclude_horizontal, _search_paths ))
   closure_env = {
     "closure_dir": closure_dir,
     "closure_root": closure_root,
