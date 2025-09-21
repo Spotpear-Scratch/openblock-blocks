@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/env python3
 # Compresses the core Blockly files into a single JavaScript file.
 #
 # Copyright 2012 Google Inc.
@@ -35,11 +35,13 @@
 #   msg/js/<LANG>.js for every language <LANG> defined in msg/js/<LANG>.json.
 
 import sys
-if sys.version_info[0] != 2:
-  raise Exception("Blockly build only compatible with Python 2.x.\n"
-                  "You are using: " + sys.version)
+from functools import reduce
+import importlib
+#if sys.version_info[0] != 2:
+#  raise Exception("Blockly build only compatible with Python 2.x.\n"
+#                  "You are using: " + sys.version)
 
-import errno, glob, httplib, json, os, re, subprocess, threading, urllib
+import errno, glob, http.client, json, os, re, subprocess, threading, urllib.request, urllib.parse, urllib.error
 
 REMOTE_COMPILER = "remote"
 
@@ -67,7 +69,7 @@ def import_path(fullpath):
   filename, ext = os.path.splitext(filename)
   sys.path.append(path)
   module = __import__(filename)
-  reload(module)  # Might be out of date.
+  importlib.reload(module)  # Might be out of date.
   del sys.path[-1]
   return module
 
@@ -184,7 +186,7 @@ if (isNodeJS) {
 }
 """))
     f.close()
-    print("SUCCESS: " + target_filename)
+    print(("SUCCESS: " + target_filename))
 
   def format_js(self, code):
     """Format JS in a way that python's format method can work with to not
@@ -192,7 +194,7 @@ if (isNodeJS) {
     replacing known keys.
     """
 
-    key_whitelist = self.closure_env.keys()
+    key_whitelist = list(self.closure_env.keys())
 
     keys_pipe_separated = reduce(lambda accum, key: accum + "|" + key, key_whitelist)
     begin_brace = re.compile(r"\{(?!%s)" % (keys_pipe_separated,))
@@ -368,7 +370,7 @@ class Gen_compressed(threading.Thread):
       else:
         args = []
         for group in [[CLOSURE_COMPILER_NPM], dash_args]:
-          args.extend(filter(lambda item: item, group))
+          args.extend([item for item in group if item])
 
           proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
@@ -415,8 +417,8 @@ class Gen_compressed(threading.Thread):
             remoteParams.append((arg, value))
 
       headers = {"Content-type": "application/x-www-form-urlencoded"}
-      conn = httplib.HTTPSConnection("closure-compiler.appspot.com")
-      conn.request("POST", "/compile", urllib.urlencode(remoteParams), headers)
+      conn = http.client.HTTPSConnection("closure-compiler.appspot.com")
+      conn.request("POST", "/compile", urllib.parse.urlencode(remoteParams), headers)
       response = conn.getresponse()
       json_str = response.read()
       conn.close()
@@ -431,33 +433,33 @@ class Gen_compressed(threading.Thread):
       n = int(name[6:]) - 1
       return filenames[n]
 
-    if json_data.has_key("serverErrors"):
+    if "serverErrors" in json_data:
       errors = json_data["serverErrors"]
       for error in errors:
-        print("SERVER ERROR: %s" % target_filename)
-        print(error["error"])
-    elif json_data.has_key("errors"):
+        print(("SERVER ERROR: %s" % target_filename))
+        print((error["error"]))
+    elif "errors" in json_data:
       errors = json_data["errors"]
       for error in errors:
         print("FATAL ERROR")
-        print(error["error"])
+        print((error["error"]))
         if error["file"]:
-          print("%s at line %d:" % (
-              file_lookup(error["file"]), error["lineno"]))
-          print(error["line"])
-          print((" " * error["charno"]) + "^")
+          print(("%s at line %d:" % (
+              file_lookup(error["file"]), error["lineno"])))
+          print((error["line"]))
+          print(((" " * error["charno"]) + "^"))
         sys.exit(1)
     else:
-      if json_data.has_key("warnings"):
+      if "warnings" in json_data:
         warnings = json_data["warnings"]
         for warning in warnings:
           print("WARNING")
-          print(warning["warning"])
+          print((warning["warning"]))
           if warning["file"]:
-            print("%s at line %d:" % (
-                file_lookup(warning["file"]), warning["lineno"]))
-            print(warning["line"])
-            print((" " * warning["charno"]) + "^")
+            print(("%s at line %d:" % (
+                file_lookup(warning["file"]), warning["lineno"])))
+            print((warning["line"]))
+            print(((" " * warning["charno"]) + "^"))
         print()
 
       return True
@@ -465,12 +467,15 @@ class Gen_compressed(threading.Thread):
     return False
 
   def write_output(self, target_filename, remove, json_data):
-      if not json_data.has_key("compiledCode"):
+      if "compiledCode" not in json_data:
         print("FATAL ERROR: Compiler did not return compiledCode.")
         sys.exit(1)
 
       compiledCode = json_data["compiledCode"]
 
+      #print("DEBUG COMPILED CODE:")
+      #print(compiledCode)
+      compiledCode = compiledCode.decode('utf-8')
       if (compiledCode.find("new Blockly.Generator") != -1):
         code = HEADER + "\nlet Blockly = require(\'openblock-blocks\');\n\n" + compiledCode
       else:
@@ -517,9 +522,9 @@ class Gen_compressed(threading.Thread):
         original_kb = int(original_b / 1024 + 0.5)
         compressed_kb = int(compressed_b / 1024 + 0.5)
         ratio = int(float(compressed_b) / float(original_b) * 100 + 0.5)
-        print("SUCCESS: " + target_filename)
-        print("Size changed from %d KB to %d KB (%d%%)." % (
-            original_kb, compressed_kb, ratio))
+        print(("SUCCESS: " + target_filename))
+        print(("Size changed from %d KB to %d KB (%d%%)." % (
+            original_kb, compressed_kb, ratio)))
         if(os.name == "nt"):
           os.remove(target_filename + ".config")
       else:
@@ -545,13 +550,13 @@ class Gen_langfiles(threading.Thread):
       if e.errno == errno.ENOENT:
         # If it was a source file, we can't proceed.
         if e.filename in srcs:
-          print("Source file missing: " + e.filename)
+          print(("Source file missing: " + e.filename))
           sys.exit(1)
         else:
           # If a destination file was missing, rebuild.
           return True
       else:
-        print("Error checking file creation times: " + e)
+        print(("Error checking file creation times: " + e))
 
   def run(self):
     # The files msg/json/{en,qqq,synonyms}.json depend on msg/messages.js.
@@ -568,7 +573,7 @@ class Gen_langfiles(threading.Thread):
       except (subprocess.CalledProcessError, OSError) as e:
         # Documentation for subprocess.check_call says that CalledProcessError
         # will be raised on failure, but I found that OSError is also possible.
-        print("Error running i18n/js_to_json.py: ", e)
+        print(("Error running i18n/js_to_json.py: ", e))
         sys.exit(1)
 
     # Checking whether it is necessary to rebuild the js files would be a lot of
@@ -591,7 +596,7 @@ class Gen_langfiles(threading.Thread):
       cmd.extend(json_files)
       subprocess.check_call(cmd)
     except (subprocess.CalledProcessError, OSError) as e:
-      print("Error running i18n/create_messages.py: ", e)
+      print(("Error running i18n/create_messages.py: ", e))
       sys.exit(1)
 
     # Output list of .js files created.
@@ -599,9 +604,9 @@ class Gen_langfiles(threading.Thread):
       # This assumes the path to the current directory does not contain "json".
       f = f.replace("json", "js")
       if os.path.isfile(f):
-        print("SUCCESS: " + f)
+        print(("SUCCESS: " + f))
       else:
-        print("FAILED to create " + f)
+        print(("FAILED to create " + f))
 
 def exclude_vertical(item):
   return not item.endswith("block_render_svg_vertical.js")
@@ -627,9 +632,10 @@ if __name__ == "__main__":
     else:
       test_proc = subprocess.Popen(test_args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     (stdout, _) = test_proc.communicate()
-    assert stdout == read(os.path.join("build", "test_expect.js"))
+    file = read(os.path.join("build", "test_expect.js"))
+    assert stdout == file.encode('utf-8')
 
-    print("Using local compiler: %s ...\n" % CLOSURE_COMPILER_NPM)
+    print(("Using local compiler: %s ...\n" % CLOSURE_COMPILER_NPM))
   except (ImportError, AssertionError):
     print("Using remote compiler: closure-compiler.appspot.com ...\n")
 
@@ -641,7 +647,8 @@ if __name__ == "__main__":
 
       calcdeps = import_path(os.path.join(
           closure_root, closure_library, "closure", "bin", "calcdeps.py"))
-    except ImportError:
+    except ImportError as e :
+      print(f"ImportError: {e}")
       if os.path.isdir(os.path.join(os.path.pardir, "closure-library-read-only")):
         # Dir got renamed when Closure moved from Google Code to GitHub in 2014.
         print("Error: Closure directory needs to be renamed from"
@@ -659,8 +666,8 @@ if __name__ == "__main__":
   search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(closure_root, closure_library)])
 
-  search_paths_horizontal = filter(exclude_vertical, search_paths)
-  search_paths_vertical = filter(exclude_horizontal, search_paths)
+  search_paths_horizontal = list(filter(exclude_vertical, search_paths))
+  search_paths_vertical = list(filter(exclude_horizontal, search_paths))
 
   closure_env = {
     "closure_dir": closure_dir,
