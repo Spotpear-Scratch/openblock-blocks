@@ -12,6 +12,7 @@
   "main": "./dist/vertical.js",
   "browser": "./shim/vertical.js",
   "scripts": {
+    "prepare": "npm install && npm prepublish",
     "deploy": "rimraf gh-pages/closure-library/scripts/ci/CloseAdobeDialog.exe && gh-pages -t -d gh-pages -m \"Build for $(git log --pretty=format:%H -n1)\"",
     "prepublish": "python build.py && webpack",
     "clean": "rm *compressed.js && rm blockly*.js && rm blocks*.js",
