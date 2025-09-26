@@ -109,6 +109,53 @@ Blockly.Blocks['event_whenmicrobitbuttonpressed'] = {
   }
 };
 
+Blockly.Blocks['event_whenspotpearbegin'] = {
+  /**
+   * Block for when spotpear begin.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "id": "event_whenspotpearbegin",
+      "message0": Blockly.Msg.EVENT_WHENSPOTPEARBEGIN,
+      "nextStatement": null,
+      "category": Blockly.Categories.event,
+      "colour": Blockly.Colours.event.primary,
+      "colourSecondary": Blockly.Colours.event.secondary,
+      "colourTertiary": Blockly.Colours.event.tertiary
+    });
+  }
+};
+
+Blockly.Blocks['event_whenspotpearbuttonpressed'] = {
+  /**
+   * Block for when spotpear button pressed.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "id": "event_whenspotpearbuttonpressed",
+      "message0": Blockly.Msg.EVENT_WHENSPOTPEARBUTTONPRESSED,
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "KEY_OPTION",
+          "options": [
+            ['A', 'a'],
+            ['B', 'b'],
+            ['A+B', 'ab']
+          ]
+        }
+      ],
+      "nextStatement": null,
+      "category": Blockly.Categories.event,
+      "colour": Blockly.Colours.event.primary,
+      "colourSecondary": Blockly.Colours.event.secondary,
+      "colourTertiary": Blockly.Colours.event.tertiary
+    });
+  }
+};
+
 Blockly.Blocks['event_whenmicrobitpinbeingtouched'] = {
   /**
    * Block for when microbit pin was touched.

@@ -274,11 +274,11 @@ Blockly.Python.scrub_ = function(block, code) {
 
   var codeWithIndent = code;
   // At this step if block is not surround by a parent and it is not empty,
-  // and it is a hat block, and it is not 'event_whenmicrobitbegin' block.
+  // and it is a hat block, and it is a 'event_whenarduinobegin' block.
   // mean's it is in a function or it is custom function, add indent
   // at start of every line.
   if (block.getSurroundParent() === null && code !== "" && block.previousConnection !== null
-    && block.getTopStackBlock().type !== 'event_whenmicrobitbegin') {
+    && block.getTopStackBlock().type == 'event_whenarduinobegin') {
     // Add indent at start except custom function
     if (block.type !== 'procedures_definition'
       && block.type !== 'procedures_prototype') {

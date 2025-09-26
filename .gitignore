@@ -20,6 +20,7 @@ javascript_compressed.js
 lua_compressed.js
 php_compressed.js
 python_compressed.js
+package-lock.json
 
 # Editor
 .vscode

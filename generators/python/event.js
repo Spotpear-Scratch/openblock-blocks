@@ -35,6 +35,18 @@ Blockly.Python['event_whenmicrobitbegin'] = function(block) {
   return code;
 };
 
+Blockly.Python['event_whenspotpearbegin'] = function(block) {
+  Blockly.Python.imports_["spotpear"] = "from spotpear import *";
+
+  var code = "";
+  var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+  if (!nextBlock) {
+    code += "pass\n";
+  }
+
+  return code;
+};
+
 Blockly.Python['event_whenmicrobitbuttonpressed'] = function(block) {
   Blockly.Python.imports_["microbit"] = "from microbit import *";
 
@@ -73,6 +85,45 @@ Blockly.Python['event_whenmicrobitbuttonpressed'] = function(block) {
   return null;
 };
 
+Blockly.Python['event_whenspotpearbuttonpressed'] = function(block) {
+  Blockly.Python.imports_["spotpear"] = "from spotpear import *";
+
+  var key = block.getFieldValue('KEY_OPTION');
+
+  var i = '';
+  while (Blockly.Python.loops_["event_whenspotpearbegin" + key + i]) {
+    if (i === '') {
+      i = 1;
+    } else {
+      i++;
+    }
+  }
+
+  Blockly.Python.loops_["event_whenspotpearbegin" + key + i] = "if button_" + key + ".is_pressed():\n" +
+    Blockly.Python.INDENT + Blockly.Python.INDENT + "on_button_" + key + i + "()";
+
+  var code = "def on_button_" + key + i + "():\n";
+
+  var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+  if (!nextBlock) {
+    code += Blockly.Python.INDENT + "pass\n";
+  } else {
+    var variablesName = [];
+    for (var x in Blockly.Python.variables_) {
+      variablesName.push(Blockly.Python.variables_[x].slice(0, Blockly.Python.variables_[x].indexOf('=') - 1));
+    }
+    if (variablesName.length !== 0) {
+      code += Blockly.Python.INDENT + "global " + variablesName.join(', ') + "\n";
+    }
+
+    code = Blockly.Python.scrub_(block, code);
+  }
+
+  Blockly.Python.libraries_["def on_button_" + key + i] = code;
+  return null;
+};
+
+
 Blockly.Python['event_whenmicrobitpinbeingtouched'] = function(block) {
   Blockly.Python.imports_["microbit"] = "from microbit import *";
 
@@ -88,6 +139,43 @@ Blockly.Python['event_whenmicrobitpinbeingtouched'] = function(block) {
   }
 
   Blockly.Python.loops_["event_whenmicrobitpinbeingtouched" + pin + i] = "if pin" + pin + ".is_pressed():\n" +
+    Blockly.Python.INDENT + Blockly.Python.INDENT + "on_pin" + pin + i + "()";
+
+  var code = "def on_pin" + pin + i + "():\n";
+  var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+  if (!nextBlock) {
+    code += Blockly.Python.INDENT + "pass\n";
+  } else {
+    var variablesName = [];
+    for (var x in Blockly.Python.variables_) {
+      variablesName.push(Blockly.Python.variables_[x].slice(0, Blockly.Python.variables_[x].indexOf('=') - 1));
+    }
+    if (variablesName.length !== 0) {
+      code += Blockly.Python.INDENT + "global " + variablesName.join(', ') + "\n";
+    }
+
+    code = Blockly.Python.scrub_(block, code);
+  }
+
+  Blockly.Python.libraries_["def on_pin" + pin + i] = code;
+  return null;
+};
+
+Blockly.Python['event_whenspotpearpinbeingtouched'] = function(block) {
+  Blockly.Python.imports_["spotpear"] = "from spotpear import *";
+
+  var pin = block.getFieldValue('PIN_OPTION');
+
+  var i = '';
+  while (Blockly.Python.loops_["event_whenspotpearpinbeingtouched" + pin + i]) {
+    if (i === '') {
+      i = 1;
+    } else {
+      i++;
+    }
+  }
+
+  Blockly.Python.loops_["event_whenspotpearpinbeingtouched" + pin + i] = "if pin" + pin + ".is_pressed():\n" +
     Blockly.Python.INDENT + Blockly.Python.INDENT + "on_pin" + pin + i + "()";
 
   var code = "def on_pin" + pin + i + "():\n";

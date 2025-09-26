@@ -60,6 +60,21 @@ Blockly.Python['control_forever'] = function(block) {
   return code;
 };
 
+Blockly.Python['control_forever'] = function(block) {
+  var branch = Blockly.Python.statementToCode(block, 'SUBSTACK');
+  branch = Blockly.Python.addLoopTrap(branch, block.id);
+
+  var code = "while True:\n";
+  code += branch;
+
+  if (block.getRootBlock().type === 'event_whenspotpearbegin') {
+    Blockly.Python.firstLoop = false;
+    code += Blockly.Python.INDENT + "repeat()\n";
+  }
+
+  return code;
+};
+
 Blockly.Python['control_if'] = function(block) {
   var argument = Blockly.Python.valueToCode(block, 'CONDITION',
       Blockly.Python.ORDER_NONE) || 'False';
@@ -108,6 +123,16 @@ Blockly.Python['control_wait_until'] = function(block) {
   return code;
 };
 
+Blockly.Python['control_wait_until'] = function(block) {
+  var argument = Blockly.Python.valueToCode(block, 'CONDITION',
+      Blockly.Python.ORDER_UNARY_POSTFIX) || 'False';
+  var code = "while not " + argument + ":\n";
+  if (block.getRootBlock().type === 'event_whenspotpearbegin') {
+    code += Blockly.Python.INDENT + "repeat()\n";
+  }
+  return code;
+};
+
 Blockly.Python['control_repeat_until'] = function(block) {
   var argument = Blockly.Python.valueToCode(block, 'CONDITION',
       Blockly.Python.ORDER_UNARY_POSTFIX) || 'False';
@@ -118,6 +143,21 @@ Blockly.Python['control_repeat_until'] = function(block) {
   var code = "while not " + argument + ":\n";
   code += branch;
   if (block.getRootBlock().type === 'event_whenmicrobitbegin') {
+    code += Blockly.Python.INDENT + "repeat()\n";
+  }
+  return code;
+};
+
+Blockly.Python['control_repeat_until'] = function(block) {
+  var argument = Blockly.Python.valueToCode(block, 'CONDITION',
+      Blockly.Python.ORDER_UNARY_POSTFIX) || 'False';
+
+  var branch = Blockly.Python.statementToCode(block, 'SUBSTACK');
+  branch = Blockly.Python.addLoopTrap(branch, block.id);
+
+  var code = "while not " + argument + ":\n";
+  code += branch;
+  if (block.getRootBlock().type === 'event_whenspotpearbegin') {
     code += Blockly.Python.INDENT + "repeat()\n";
   }
   return code;
