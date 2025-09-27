@@ -77,3 +77,26 @@ Blockly.Blocks['matrix8x12'] = {
     });
   }
 };
+
+Blockly.Blocks['matrix16x16'] = {
+  /**
+   * Block for matrix value.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "field_matrix",
+          "name": "MATRIX",
+          "width": 16,
+          "height": 16
+        }
+      ],
+      "outputShape": Blockly.OUTPUT_SHAPE_ROUND,
+      "output": "Number",
+      "extensions": ["colours_pen"]
+    });
+  }
+};

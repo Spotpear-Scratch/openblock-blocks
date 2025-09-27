@@ -72,6 +72,18 @@ Blockly.Python['spotpear_display_showImage'] = function(block) {
   return code;
 };
 
+Blockly.Python['spotpear_display_showImage16x16'] = function(block) {
+  var arg0 = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_ATOMIC) || '0';
+
+  arg0 = arg0.replace(/1/g, '9');
+  arg0 = arg0.slice(0, 16) + ':' + arg0.slice(16, 32) + ':' + arg0.slice(32, 48)
+    + ':' + arg0.slice(48, 64) + ':' + arg0.slice(64, 80) + ':' + arg0.slice(80, 96) + ':' + arg0.slice(96, 112)
+    + ':' + arg0.slice(112, 128) + ':' + arg0.slice(128, 144) + ':' + arg0.slice(144, 160) + ':' + arg0.slice(176, 192)
+    + ':' + arg0.slice(192, 208) + ':' + arg0.slice(208, 224) + ':' + arg0.slice(224, 240) + ':' + arg0.slice(240, 256);
+  var code = "display.show(Image('" + arg0 + "'))\n";
+  return code;
+};
+
 Blockly.Python['spotpear_display_showImageUntil'] = function(block) {
   var arg0 = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_ATOMIC) || '0';
   var arg1 = Blockly.Python.valueToCode(block, 'TIME', Blockly.Python.ORDER_ATOMIC) || '0';

@@ -555,6 +555,13 @@ Blockly.Blocks.defaultToolbox = '<xml id="toolbox-categories" style="display: no
         '</shadow>' +
       '</value>' +
     '</block>' +
+    '<block type="extension_spotpear_display16x16" id="extension_spotpear_display16x16">' +
+      '<value name="MATRIX">' +
+        '<shadow type="matrix">' +
+          '<field name="MATRIX">0101010101100010010101010110001001010101011000100101010101100010010101010110001001010101011000100101010101100010010101010110001001010101011000100101010101100010010101010110001001010101011000100101010101100010010101010110001001010101011000100101010101100010</field>' +
+        '</shadow>' +
+      '</value>' +
+    '</block>' +
     '<block type="extension_music_play_note" id="extension_music_play_note">' +
       '<value name="NOTE">' +
         '<shadow type="note">' +

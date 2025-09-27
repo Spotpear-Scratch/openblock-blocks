@@ -31,3 +31,5 @@ Blockly.Python['matrix'] = function(block) {
   }
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
+
+Blockly.Python['matrix16x16'] = Blockly.Python['matrix'];
