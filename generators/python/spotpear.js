@@ -81,7 +81,7 @@ Blockly.Python['spotpear_display_drawLine'] = function(block) {
   color = color.replace(/#/y, '0x');
   var width = Blockly.Python.valueToCode(block, 'WIDTH', Blockly.Python.ORDER_FUNCTION_CALL) || '';
 
-  var code = "draw_line(int(" + x1 + "), int(" + y1 + "), int(" + x2 + "), int(" + y2 + "), str(" + color + "), int(" + width + "))\n";
+  var code = "draw_line(int(" + x1 + "), int(" + y1 + "), int(" + x2 + "), int(" + y2 + "), " + color + ", int(" + width + "))\n";
   return code;
 };
 
@@ -93,7 +93,7 @@ Blockly.Python['spotpear_display_drawRectangle'] = function(block) {
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   color = color.replace(/#/y, '0x');
 
-  var code = "draw_rectangle(int(" + x1 + "), int(" + y1 + "), int(" + width + "), int(" + height + "), str(" + color + "))\n";
+  var code = "draw_rectangle(int(" + x1 + "), int(" + y1 + "), int(" + width + "), int(" + height + "), " + color + ")\n";
   return code;
 };
 
@@ -104,7 +104,7 @@ Blockly.Python['spotpear_display_drawCircle'] = function(block) {
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   color = color.replace(/#/y, '0x');
 
-  var code = "draw_circle(int(" + x1 + "), int(" + y1 + "), int(" + radius + "), int(" + color + "))\n";
+  var code = "draw_circle(int(" + x1 + "), int(" + y1 + "), int(" + radius + "), " + color + ")\n";
   return code;
 };
 
@@ -113,18 +113,19 @@ Blockly.Python['spotpear_display_showImage'] = function(block) {
 
   arg0 = arg0.slice(0, 5) + ':' + arg0.slice(5, 10) + ':' + arg0.slice(10, 15)
     + ':' + arg0.slice(15, 20) + ':' + arg0.slice(20, 25);
-  var code = "parse_matrix('" + arg0 + "'))\n";
+  var code = "draw_grid( parse_matrix('" + arg0 + "'), 5, 0xff0000, 128, 128 )\n";
   return code;
 };
 
 Blockly.Python['spotpear_display_showImage16x16'] = function(block) {
   var arg0 = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_ATOMIC) || '0';
 
-  arg0 = arg0.slice(0, 16) + ':' + arg0.slice(16, 32) + ':' + arg0.slice(32, 48)
-    + ':' + arg0.slice(48, 64) + ':' + arg0.slice(64, 80) + ':' + arg0.slice(80, 96) + ':' + arg0.slice(96, 112)
-    + ':' + arg0.slice(112, 128) + ':' + arg0.slice(128, 144) + ':' + arg0.slice(144, 160) + ':' + arg0.slice(176, 192)
-    + ':' + arg0.slice(192, 208) + ':' + arg0.slice(208, 224) + ':' + arg0.slice(224, 240) + ':' + arg0.slice(240, 256);
-  var code = "parse_matrix('" + arg0 + "')\n";
+  arg0 = arg0.slice(0, 16) + ':' + arg0.slice(16, 32) + ':' + arg0.slice(32, 48) + ':' + arg0.slice(48, 64) 
+ + ':' + arg0.slice(64, 80) + ':' + arg0.slice(80, 96) + ':' + arg0.slice(96, 112) + ':' + arg0.slice(112, 128) 
+ + ':' + arg0.slice(128, 144) + ':' + arg0.slice(144, 160) + ':' + arg0.slice(160, 176) + ':' + arg0.slice(176, 192) 
+ + ':' + arg0.slice(192, 208) + ':' + arg0.slice(208, 224) + ':' + arg0.slice(224, 240) + ':' + arg0.slice(240, 256);
+ 
+  var code = "draw_grid( parse_matrix('" + arg0 + "'), 5, 0xff0000, 128, 128 )\n";
   return code;
 };
 
@@ -145,9 +146,9 @@ Blockly.Python['spotpear_display_show'] = function(block) {
   var y1 = Blockly.Python.valueToCode(block, 'Y', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   color = color.replace(/#/y, '0x');
-  var size = Blockly.Python.valueToCode(block, 'SIZE', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var _size = Blockly.Python.valueToCode(block, 'SIZE', Blockly.Python.ORDER_FUNCTION_CALL) || '14';
 
-  var code = "display_text_at_position(str(" + txt + "), int(" + x1 + "), int(" + y1 + "), str(" + color + "), int(" + size + "))\n";
+  var code = "display_text_at_position(" + txt + ", int(" + x1 + "), int(" + y1 + "), " + color + ", int(" + _size + "))\n";
   return code;
 };
 
@@ -169,7 +170,7 @@ Blockly.Python['spotpear_display_drawPixel'] = function(block) {
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   color = color.replace(/#/y, '0x');
 
-  var code = "set_pixel(int(" + x + "), int(" + y + "), str(" + color + "))\n";
+  var code = "set_pixel(int(" + x + "), int(" + y + "), " + color + ")\n";
   return code;
 };
 
