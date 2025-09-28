@@ -50,37 +50,81 @@ Blockly.Python['spotpear_pin_readDigitalPin'] = function(block) {
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
-Blockly.Python['spotpear_pin_readAnalogPin'] = function(block) {
-  var pin = block.getFieldValue('PIN') || '0';
-  var code = "pin" + pin + ".read_analog()";
-  return [code, Blockly.Python.ORDER_ATOMIC];
-};
-
 Blockly.Python['spotpear_pin_pinTouched'] = function(block) {
   var pin = block.getFieldValue('PIN') || '0';
   var code = "pin" + pin + ".is_touched()";
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
+Blockly.Python['spotpear_timer_setTimer'] = function(block) {
+  var tid = Blockly.Python.valueToCode(block, 'TIMER', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var value = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+
+  var code = "set_timer(int(" + tid + "), int(" + value + "))\n";
+  return code;
+};
+
+Blockly.Python['spotpear_display_setLED'] = function(block) {
+  var state = block.getFieldValue('STATE') || '0';
+
+  var code = "set_led(int(" + state + "))\n";
+  return code;
+};
+
+
+Blockly.Python['spotpear_display_drawLine'] = function(block) {
+  var x1 = Blockly.Python.valueToCode(block, 'X1', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var y1 = Blockly.Python.valueToCode(block, 'Y1', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var x2 = Blockly.Python.valueToCode(block, 'X2', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var y2 = Blockly.Python.valueToCode(block, 'Y2', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  color = color.replace(/#/y, '0x');
+  var width = Blockly.Python.valueToCode(block, 'WIDTH', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+
+  var code = "draw_line(int(" + x1 + "), int(" + y1 + "), int(" + x2 + "), int(" + y2 + "), str(" + color + "), int(" + width + "))\n";
+  return code;
+};
+
+Blockly.Python['spotpear_display_drawRectangle'] = function(block) {
+  var x1 = Blockly.Python.valueToCode(block, 'X', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var y1 = Blockly.Python.valueToCode(block, 'Y', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var width = Blockly.Python.valueToCode(block, 'WIDTH', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var height = Blockly.Python.valueToCode(block, 'HEIGHT', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  color = color.replace(/#/y, '0x');
+
+  var code = "draw_rectangle(int(" + x1 + "), int(" + y1 + "), int(" + width + "), int(" + height + "), str(" + color + "))\n";
+  return code;
+};
+
+Blockly.Python['spotpear_display_drawCircle'] = function(block) {
+  var x1 = Blockly.Python.valueToCode(block, 'X', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var y1 = Blockly.Python.valueToCode(block, 'Y', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var radius = Blockly.Python.valueToCode(block, 'RADIUS', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  color = color.replace(/#/y, '0x');
+
+  var code = "draw_circle(int(" + x1 + "), int(" + y1 + "), int(" + radius + "), int(" + color + "))\n";
+  return code;
+};
+
 Blockly.Python['spotpear_display_showImage'] = function(block) {
   var arg0 = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_ATOMIC) || '0';
 
-  arg0 = arg0.replace(/1/g, '9');
   arg0 = arg0.slice(0, 5) + ':' + arg0.slice(5, 10) + ':' + arg0.slice(10, 15)
     + ':' + arg0.slice(15, 20) + ':' + arg0.slice(20, 25);
-  var code = "display.show(Image('" + arg0 + "'))\n";
+  var code = "parse_matrix('" + arg0 + "'))\n";
   return code;
 };
 
 Blockly.Python['spotpear_display_showImage16x16'] = function(block) {
   var arg0 = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_ATOMIC) || '0';
 
-  arg0 = arg0.replace(/1/g, '9');
   arg0 = arg0.slice(0, 16) + ':' + arg0.slice(16, 32) + ':' + arg0.slice(32, 48)
     + ':' + arg0.slice(48, 64) + ':' + arg0.slice(64, 80) + ':' + arg0.slice(80, 96) + ':' + arg0.slice(96, 112)
     + ':' + arg0.slice(112, 128) + ':' + arg0.slice(128, 144) + ':' + arg0.slice(144, 160) + ':' + arg0.slice(176, 192)
     + ':' + arg0.slice(192, 208) + ':' + arg0.slice(208, 224) + ':' + arg0.slice(224, 240) + ':' + arg0.slice(240, 256);
-  var code = "display.show(Image('" + arg0 + "'))\n";
+  var code = "parse_matrix('" + arg0 + "')\n";
   return code;
 };
 
@@ -88,57 +132,45 @@ Blockly.Python['spotpear_display_showImageUntil'] = function(block) {
   var arg0 = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_ATOMIC) || '0';
   var arg1 = Blockly.Python.valueToCode(block, 'TIME', Blockly.Python.ORDER_ATOMIC) || '0';
 
-  arg0 = arg0.replace(/1/g, '9');
   arg0 = arg0.slice(0, 5) + ':' + arg0.slice(5, 10) + ':' + arg0.slice(10, 15)
     + ':' + arg0.slice(15, 20) + ':' + arg0.slice(20, 25);
-  var code = "display.show(Image('" + arg0 + "'))\n" + "sleep(float(" + arg1 + ") * 1000)\n" + "display.clear()\n";
+
+  var code = "parse_matrix('" + arg0 + "')\n" + "sleep(float(" + arg1 + ") * 1000)\n" + "display.clear()\n";
   return code;
 };
 
 Blockly.Python['spotpear_display_show'] = function(block) {
-  var arg0 = Blockly.Python.valueToCode(block, 'TEXT', Blockly.Python.ORDER_FUNCTION_CALL) || '';
-  var code = "display.scroll(str(" + arg0 + "), wait=False, loop=False)\n";
-  return code;
-};
+  var txt = Blockly.Python.valueToCode(block, 'TEXT', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var x1 = Blockly.Python.valueToCode(block, 'X', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var y1 = Blockly.Python.valueToCode(block, 'Y', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  color = color.replace(/#/y, '0x');
+  var size = Blockly.Python.valueToCode(block, 'SIZE', Blockly.Python.ORDER_FUNCTION_CALL) || '';
 
-Blockly.Python['spotpear_display_showUntilScrollDone'] = function(block) {
-  var arg0 = Blockly.Python.valueToCode(block, 'TEXT', Blockly.Python.ORDER_FUNCTION_CALL) || '';
-  var code = "display.scroll(str(" + arg0 + "), wait=True, loop=False)\n";
+  var code = "display_text_at_position(str(" + txt + "), int(" + x1 + "), int(" + y1 + "), str(" + color + "), int(" + size + "))\n";
   return code;
 };
 
 Blockly.Python['spotpear_display_clearDisplay'] = function() {
-  var code = "display.clear()\n";
+  var code = "clear_screen()\n";
   return code;
 };
 
-Blockly.Python['spotpear_display_lightPixelAt'] = function(block) {
-  var sta = block.getFieldValue('STATE');
+Blockly.Python['spotpear_display_setBackgroundColor'] = function(block) {
+  var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  color = color.replace(/#/y, '0x');
+  var code = "set_screen_background_color(" + color + ")\n";
+  return code;
+};
+
+Blockly.Python['spotpear_display_drawPixel'] = function(block) {
   var x = Blockly.Python.valueToCode(block, 'X', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var y = Blockly.Python.valueToCode(block, 'Y', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  color = color.replace(/#/y, '0x');
 
-  if (sta === 'off') {
-    sta = 0;
-  } else {
-    sta = 9;
-  }
-
-  var code = "display.set_pixel(int(" + x + "), int(" + y + "), " + sta + ")\n";
+  var code = "set_pixel(int(" + x + "), int(" + y + "), str(" + color + "))\n";
   return code;
-};
-
-Blockly.Python['spotpear_display_showOnPiexlbrightness'] = function(block) {
-  var brt = Blockly.Python.valueToCode(block, 'BRT', Blockly.Python.ORDER_FUNCTION_CALL) || '9';
-  var x = Blockly.Python.valueToCode(block, 'X', Blockly.Python.ORDER_FUNCTION_CALL) || '';
-  var y = Blockly.Python.valueToCode(block, 'Y', Blockly.Python.ORDER_FUNCTION_CALL) || '';
-
-  var code = "display.set_pixel(int(" + x + "), int(" + y + "), " + brt + ")\n";
-  return code;
-};
-
-Blockly.Python['spotpear_display_menu_ledBrightness'] = function(block) {
-  var code = block.getFieldValue('ledBrightness') || '9';
-  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Python['spotpear_sensor_buttonIsPressed'] = function(block) {
