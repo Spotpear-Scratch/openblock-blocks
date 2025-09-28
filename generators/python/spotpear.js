@@ -124,8 +124,8 @@ Blockly.Python['spotpear_display_showImage16x16'] = function(block) {
  + ':' + arg0.slice(64, 80) + ':' + arg0.slice(80, 96) + ':' + arg0.slice(96, 112) + ':' + arg0.slice(112, 128) 
  + ':' + arg0.slice(128, 144) + ':' + arg0.slice(144, 160) + ':' + arg0.slice(160, 176) + ':' + arg0.slice(176, 192) 
  + ':' + arg0.slice(192, 208) + ':' + arg0.slice(208, 224) + ':' + arg0.slice(224, 240) + ':' + arg0.slice(240, 256);
- 
-  var code = "draw_grid( parse_matrix('" + arg0 + "'), 5, 0xff0000, 128, 128 )\n";
+
+  var code = "draw_grid( parse_matrix('" + arg0 + "'), 1, 0xff0000, 128, 128 )\n";
   return code;
 };
 
