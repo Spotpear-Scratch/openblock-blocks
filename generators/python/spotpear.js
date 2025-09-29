@@ -129,17 +129,6 @@ Blockly.Python['spotpear_display_showImage16x16'] = function(block) {
   return code;
 };
 
-Blockly.Python['spotpear_display_showImageUntil'] = function(block) {
-  var arg0 = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_ATOMIC) || '0';
-  var arg1 = Blockly.Python.valueToCode(block, 'TIME', Blockly.Python.ORDER_ATOMIC) || '0';
-
-  arg0 = arg0.slice(0, 5) + ':' + arg0.slice(5, 10) + ':' + arg0.slice(10, 15)
-    + ':' + arg0.slice(15, 20) + ':' + arg0.slice(20, 25);
-
-  var code = "parse_matrix('" + arg0 + "')\n" + "sleep(float(" + arg1 + ") * 1000)\n" + "display.clear()\n";
-  return code;
-};
-
 Blockly.Python['spotpear_display_show'] = function(block) {
   var txt = Blockly.Python.valueToCode(block, 'TEXT', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var x1 = Blockly.Python.valueToCode(block, 'X', Blockly.Python.ORDER_FUNCTION_CALL) || '';
