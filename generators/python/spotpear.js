@@ -159,7 +159,7 @@ Blockly.Python['spotpear_display_drawPixel'] = function(block) {
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   color = color.replace(/#/y, '0x');
 
-  var code = "set_pixel(int(" + x + "), int(" + y + "), " + color + ")\n";
+  var code = "draw_pixel(int(" + x + "), int(" + y + "), " + color + ")\n";
   return code;
 };
 
