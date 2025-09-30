@@ -163,6 +163,21 @@ Blockly.Python['spotpear_display_drawPixel'] = function(block) {
   return code;
 };
 
+
+Blockly.Python['spotpear_display_rgb'] = function(block) {
+  var order = Blockly.Python.ORDER_FUNCTION_CALL;
+  var r = Blockly.Python.valueToCode(block, 'RED', order) || '';
+  var cr = isNaN(r) ? r.replace(/^\((.*)\)$/, "$1") : Math.max(0, Math.min(r, 255));
+  var g = Blockly.Python.valueToCode(block, 'GREEN', order) || '';
+  var cg = isNaN(g) ? g.replace(/^\((.*)\)$/, "$1") : Math.max(0, Math.min(g, 255));
+  var b = Blockly.Python.valueToCode(block, 'BLUE', order) || '';
+  var cb = isNaN(b) ? b.replace(/^\((.*)\)$/, "$1") : Math.max(0, Math.min(b, 255));
+
+  var code = 'int(\'0x{:02X}{:02X}{:02X}\'.format(' + cr + ',' + cg + ',' + cb + '))'
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+
+
 Blockly.Python['spotpear_sensor_buttonIsPressed'] = function(block) {
   var key = block.getFieldValue('KEY');
 
