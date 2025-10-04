@@ -57,10 +57,10 @@ Blockly.Python['spotpear_pin_pinTouched'] = function(block) {
 };
 
 Blockly.Python['spotpear_timer_setTimer'] = function(block) {
-  var tid = Blockly.Python.valueToCode(block, 'TIMER', Blockly.Python.ORDER_FUNCTION_CALL) || '';
-  var value = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  var timer = block.getFieldValue('TIMER');
+  var value = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_FUNCTION_CALL) || '0';
 
-  var code = "set_timer(" + tid + ", " + value + ")\n";
+  var code = "set_timer(" + timer + ", " + value + ")\n";
   return code;
 };
 
