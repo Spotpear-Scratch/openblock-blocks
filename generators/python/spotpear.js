@@ -60,14 +60,14 @@ Blockly.Python['spotpear_timer_setTimer'] = function(block) {
   var tid = Blockly.Python.valueToCode(block, 'TIMER', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var value = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_FUNCTION_CALL) || '';
 
-  var code = "set_timer(int(" + tid + "), int(" + value + "))\n";
+  var code = "set_timer(" + tid + ", " + value + ")\n";
   return code;
 };
 
 Blockly.Python['spotpear_display_setLED'] = function(block) {
-  var state = block.getFieldValue('STATE') || '0';
+  var state = block.getFieldValue('STATE') || 0;
 
-  var code = "set_led(int(" + state + "))\n";
+  var code = "set_led(" + state + ")\n";
   return code;
 };
 
@@ -81,7 +81,7 @@ Blockly.Python['spotpear_display_drawLine'] = function(block) {
   color = color.replace(/#/y, '0x');
   var width = Blockly.Python.valueToCode(block, 'WIDTH', Blockly.Python.ORDER_FUNCTION_CALL) || '';
 
-  var code = "draw_line(int(" + x1 + "), int(" + y1 + "), int(" + x2 + "), int(" + y2 + "), " + color + ", int(" + width + "))\n";
+  var code = "draw_line(" + x1 + ", " + y1 + ", " + x2 + ", " + y2 + ", " + color + ", " + width + ")\n";
   return code;
 };
 
@@ -93,7 +93,7 @@ Blockly.Python['spotpear_display_drawRectangle'] = function(block) {
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   color = color.replace(/#/y, '0x');
 
-  var code = "draw_rectangle(int(" + x1 + "), int(" + y1 + "), int(" + width + "), int(" + height + "), " + color + ")\n";
+  var code = "draw_rectangle(" + x1 + ", " + y1 + ", " + width + ", " + height + ", " + color + ")\n";
   return code;
 };
 
@@ -104,7 +104,7 @@ Blockly.Python['spotpear_display_drawCircle'] = function(block) {
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   color = color.replace(/#/y, '0x');
 
-  var code = "draw_circle(int(" + x1 + "), int(" + y1 + "), int(" + radius + "), " + color + ")\n";
+  var code = "draw_circle(" + x1 + ", " + y1 + ", " + radius + ", " + color + ")\n";
   return code;
 };
 
@@ -134,10 +134,10 @@ Blockly.Python['spotpear_display_show'] = function(block) {
   var x1 = Blockly.Python.valueToCode(block, 'X', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var y1 = Blockly.Python.valueToCode(block, 'Y', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
-  color = color.replace(/#/y, '0x');
+  color = color.replace(/#/y, '0x').replace(/^\((.*)\)$/, "$1");
   var _size = Blockly.Python.valueToCode(block, 'SIZE', Blockly.Python.ORDER_FUNCTION_CALL) || '14';
 
-  var code = "display_text_at_position(" + txt + ", int(" + x1 + "), int(" + y1 + "), " + color + ", int(" + _size + "))\n";
+  var code = "display_text_at_position(" + txt + ", " + x1 + ", " + y1 + ", " + color + ", " + _size + ")\n";
   return code;
 };
 
@@ -148,7 +148,7 @@ Blockly.Python['spotpear_display_clearDisplay'] = function() {
 
 Blockly.Python['spotpear_display_setBackgroundColor'] = function(block) {
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
-  color = color.replace(/#/y, '0x');
+  color = color.replace(/#/y, '0x').replace(/^\((.*)\)$/, "$1");
   var code = "set_screen_background_color(" + color + ")\n";
   return code;
 };
@@ -159,21 +159,21 @@ Blockly.Python['spotpear_display_drawPixel'] = function(block) {
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   color = color.replace(/#/y, '0x');
 
-  var code = "draw_pixel(int(" + x + "), int(" + y + "), " + color + ")\n";
+  var code = "draw_pixel(" + x + ", " + y + ", " + color + ")\n";
   return code;
 };
 
 
 Blockly.Python['spotpear_display_rgb'] = function(block) {
   var order = Blockly.Python.ORDER_FUNCTION_CALL;
-  var r = Blockly.Python.valueToCode(block, 'RED', order) || '';
+  var r = Blockly.Python.valueToCode(block, 'RED', order) || 0;
   var cr = isNaN(r) ? r.replace(/^\((.*)\)$/, "$1") : Math.max(0, Math.min(r, 255));
-  var g = Blockly.Python.valueToCode(block, 'GREEN', order) || '';
+  var g = Blockly.Python.valueToCode(block, 'GREEN', order) || 0;
   var cg = isNaN(g) ? g.replace(/^\((.*)\)$/, "$1") : Math.max(0, Math.min(g, 255));
-  var b = Blockly.Python.valueToCode(block, 'BLUE', order) || '';
+  var b = Blockly.Python.valueToCode(block, 'BLUE', order) || 0;
   var cb = isNaN(b) ? b.replace(/^\((.*)\)$/, "$1") : Math.max(0, Math.min(b, 255));
 
-  var code = 'int(\'0x{:02X}{:02X}{:02X}\'.format(' + cr + ',' + cg + ',' + cb + '))'
+  var code = (cr << 16) + (cg << 8) + (cb) + 0x0;
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
