@@ -38,7 +38,7 @@ Blockly.Python['event_whenmicrobitbegin'] = function(block) {
 Blockly.Python['event_whenspotpearbegin'] = function(block) {
   Blockly.Python.imports_["spotpear"] = "from spotpear import *";
 
-  var code = "import random\nimport math\nimport machine\nimport st77xx\nimport lvgl as lv\n\ninit_display()\n\n";
+  var code = "init_display()\n\n";
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
   if (!nextBlock) {
     code += "pass\n";
