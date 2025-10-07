@@ -61,7 +61,7 @@ Blockly.Python['event_whenspotpeartimerexpires'] = function(block) {
     }
   }
 
-  var code = "def on_timer_trigger_timer" + timer + i + "():\n";
+  var code = "def on_timer_trigger_timer" + timer + i + "(timer):\n";
 
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
   if (!nextBlock) {
@@ -161,7 +161,13 @@ Blockly.Python['event_whenspotpearbuttonpressed'] = function(block) {
       code += Blockly.Python.INDENT + "global " + variablesName.join(', ') + "\n";
     }
 
-    code = Blockly.Python.scrub_(block, code);
+    var bodyCode = Blockly.Python.scrub_(block, '');
+    if (bodyCode.trim() !== '') {
+      code += bodyCode
+        .split('\n')
+        .map(line => Blockly.Python.INDENT + line)
+        .join('\n') + '\n';
+    }
   }
 
   Blockly.Python.libraries_["def on_button_" + key + i] = code;

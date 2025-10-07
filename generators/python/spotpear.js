@@ -60,7 +60,7 @@ Blockly.Python['spotpear_timer_setTimer'] = function(block) {
   var timer = block.getFieldValue('TIMER');
   var value = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_FUNCTION_CALL) || '0';
 
-  var code = "set_timer(" + timer + ", " + value + ")\n";
+  var code = "set_timer(" + timer + ", " + value + ", on_timer_trigger_timer" + timer + ")\n";
   return code;
 };
 
