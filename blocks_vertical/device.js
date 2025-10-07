@@ -156,6 +156,37 @@ Blockly.Blocks['event_whenspotpearbuttonpressed'] = {
   }
 };
 
+Blockly.Blocks['event_whenspotpeartimerexpires'] = {
+  /**
+   * Block for when spotpear timer expires.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "id": "event_whenspotpeartimerexpires",
+      "message0": Blockly.Msg.EVENT_WHENSPOTPEARTIMEREXPIRES,
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "TIMER_OPTION",
+          "options": [
+            ['A', '1'],
+            ['B', '2'],
+            ['C', '3'],
+            ['D', '4'],
+            ['E', '5'],
+          ]
+        }
+      ],
+      "nextStatement": null,
+      "category": Blockly.Categories.event,
+      "colour": Blockly.Colours.event.primary,
+      "colourSecondary": Blockly.Colours.event.secondary,
+      "colourTertiary": Blockly.Colours.event.tertiary
+    });
+  }
+};
+
 Blockly.Blocks['event_whenmicrobitpinbeingtouched'] = {
   /**
    * Block for when microbit pin was touched.

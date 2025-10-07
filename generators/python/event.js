@@ -47,43 +47,49 @@ Blockly.Python['event_whenspotpearbegin'] = function(block) {
   return code;
 };
 
-// Blockly.Python['event_whentimerexpires'] = function(block) {
-//   Blockly.Python.imports_["spotpear"] = "from spotpear import *";
+Blockly.Python['event_whenspotpeartimerexpires'] = function(block) {
+  Blockly.Python.imports_["spotpear"] = "from spotpear import *";
 
-//   var timer = block.getFieldValue('TIMER_OPTION');
+  var timer = block.getFieldValue('TIMER_OPTION');
 
-//   var i = '';
-//   while (Blockly.Python.loops_["event_whentimerexpires" + timer + i]) {
-//     if (i === '') {
-//       i = 1;
-//     } else {
-//       i++;
-//     }
-//   }
+  var i = '';
+  while (Blockly.Python.loops_["event_whenspotpearbegin" + timer + i]) {
+    if (i === '') {
+      i = 1;
+    } else {
+      i++;
+    }
+  }
 
-//   Blockly.Python.loops_["event_whentimerexpires" + timer + i] = "if timer_" + timer + ".is_expired():\n" +
-//     Blockly.Python.INDENT + Blockly.Python.INDENT + "on_timer_" + timer + i + "()";
+  var code = "def on_timer_trigger_timer" + timer + i + "():\n";
 
-//   var code = "def on_timer_" + timer + i + "():\n";
+  var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+  if (!nextBlock) {
+    code += Blockly.Python.INDENT + "pass\n";
+  } else {
+    var variablesName = [];
+    
+    for (var x in Blockly.Python.variables_) {
+      variablesName.push(Blockly.Python.variables_[x].slice(0, Blockly.Python.variables_[x].indexOf('=') - 1));
+    }
 
-//   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-//   if (!nextBlock) {
-//     code += Blockly.Python.INDENT + "pass\n";
-//   } else {
-//     var variablesName = [];
-//     for (var x in Blockly.Python.variables_) {
-//       variablesName.push(Blockly.Python.variables_[x].slice(0, Blockly.Python.variables_[x].indexOf('=') - 1));
-//     }
-//     if (variablesName.length !== 0) {
-//       code += Blockly.Python.INDENT + "global " + variablesName.join(', ') + "\n";
-//     }
+    if (variablesName.length !== 0) {
+      code += Blockly.Python.INDENT + "global " + variablesName.join(', ') + "\n";
+    }
 
-//     code = Blockly.Python.scrub_(block, code);
-//   }
+    var bodyCode = Blockly.Python.scrub_(block, '');
+    if (bodyCode.trim() !== '') {
+      code += bodyCode
+        .split('\n')
+        .map(line => Blockly.Python.INDENT + line)
+        .join('\n') + '\n';
+    }
+    
+  }
 
-//   Blockly.Python.libraries_["def on_timer_" + timer + i] = code;
-//   return null;
-// };
+  Blockly.Python.libraries_["def on_timer_trigger_timer" + timer + i] = code;
+  return null;
+};
   
 
 Blockly.Python['event_whenmicrobitbuttonpressed'] = function(block) {

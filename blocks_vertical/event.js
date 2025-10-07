@@ -262,30 +262,6 @@ Blockly.Blocks['event_broadcastandwait'] = {
   }
 };
 
-// Blockly.Blocks['event_whentimerelapsed'] = {
-//   /**
-//    * Block to send a broadcast.
-//    * @this Blockly.Block
-//    */
-//   init: function() {
-//     this.jsonInit({
-//       "id": "event_whentimerelapsed",
-//       "message0": Blockly.Msg.EVENT_WHENTIMERELAPSED,
-//       "args0": [
-//         {
-//           "type": "field_dropdown",
-//           "name": "TIMER_OPTION",
-//           "options": [
-//             [Blockly.Msg.EVENT_WHENKEYPRESSED_SPACE, 'space'],
-//           ]
-//         }
-//       ],
-//       "category": Blockly.Categories.event,
-//       "extensions": ["colours_event", "shape_hat"]
-//     });
-//   }
-// };
-
 Blockly.Blocks['event_whenkeypressed'] = {
   /**
    * Block to send a broadcast.

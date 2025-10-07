@@ -56,6 +56,7 @@ Blockly.ScratchMsgs.locales["en"] =
     "EVENT_WHENMICROBITGESTURE": "when the gestrue %1",
     "EVENT_WHENSPOTPEARBEGIN": "when spotpear begin",
     "EVENT_WHENSPOTPEARBUTTONPRESSED": "when button %1 pressed",
+    "EVENT_WHENSPOTPEARTIMEREXPIRES" : 'when timer %1 expires',
     "EVENT_WHENSPOTPEARPINBEINGTOUCHED": "when pin %1 being touched",
     "EVENT_WHENFLAGCLICKED": "when %1 clicked",
     "EVENT_WHENTHISSPRITECLICKED": "when this sprite clicked",
