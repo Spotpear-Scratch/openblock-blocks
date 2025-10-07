@@ -78,8 +78,12 @@ Blockly.Python['spotpear_display_drawLine'] = function(block) {
   var x2 = Blockly.Python.valueToCode(block, 'X2', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var y2 = Blockly.Python.valueToCode(block, 'Y2', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
-  color = color.replace(/#/y, '0x');
   var width = Blockly.Python.valueToCode(block, 'WIDTH', Blockly.Python.ORDER_FUNCTION_CALL) || '';
+  color = color.replace(/#/y, '0x').replace(/^\((.*)\)$/, "$1");
+  x1 = x1.replace(/^\((.*)\)$/, "$1");
+  y1 = y1.replace(/^\((.*)\)$/, "$1");
+  x2 = x2.replace(/^\((.*)\)$/, "$1");
+  y2 = y2.replace(/^\((.*)\)$/, "$1");
 
   var code = "draw_line(" + x1 + ", " + y1 + ", " + x2 + ", " + y2 + ", " + color + ", " + width + ")\n";
   return code;
@@ -91,7 +95,11 @@ Blockly.Python['spotpear_display_drawRectangle'] = function(block) {
   var width = Blockly.Python.valueToCode(block, 'WIDTH', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var height = Blockly.Python.valueToCode(block, 'HEIGHT', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
-  color = color.replace(/#/y, '0x');
+  color = color.replace(/#/y, '0x').replace(/^\((.*)\)$/, "$1");
+  x1 = x1.replace(/^\((.*)\)$/, "$1");
+  y1 = y1.replace(/^\((.*)\)$/, "$1");
+  width = width.replace(/^\((.*)\)$/, "$1");
+  height = height.replace(/^\((.*)\)$/, "$1");
 
   var code = "draw_rectangle(" + x1 + ", " + y1 + ", " + width + ", " + height + ", " + color + ")\n";
   return code;
@@ -102,7 +110,10 @@ Blockly.Python['spotpear_display_drawCircle'] = function(block) {
   var y1 = Blockly.Python.valueToCode(block, 'Y', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var radius = Blockly.Python.valueToCode(block, 'RADIUS', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
-  color = color.replace(/#/y, '0x');
+  color = color.replace(/#/y, '0x').replace(/^\((.*)\)$/, "$1");
+  x1 = x1.replace(/^\((.*)\)$/, "$1");
+  y1 = y1.replace(/^\((.*)\)$/, "$1");
+  radius = radius.replace(/^\((.*)\)$/, "$1");
 
   var code = "draw_circle(" + x1 + ", " + y1 + ", " + radius + ", " + color + ")\n";
   return code;
@@ -136,6 +147,8 @@ Blockly.Python['spotpear_display_show'] = function(block) {
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   color = color.replace(/#/y, '0x').replace(/^\((.*)\)$/, "$1");
   var _size = Blockly.Python.valueToCode(block, 'SIZE', Blockly.Python.ORDER_FUNCTION_CALL) || '14';
+  x1 = x1.replace(/^\((.*)\)$/, "$1");
+  y1 = y1.replace(/^\((.*)\)$/, "$1");
 
   var code = "display_text_at_position(" + txt + ", " + x1 + ", " + y1 + ", " + color + ", " + _size + ")\n";
   return code;
@@ -157,7 +170,9 @@ Blockly.Python['spotpear_display_drawPixel'] = function(block) {
   var x = Blockly.Python.valueToCode(block, 'X', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var y = Blockly.Python.valueToCode(block, 'Y', Blockly.Python.ORDER_FUNCTION_CALL) || '';
   var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_FUNCTION_CALL) || '';
-  color = color.replace(/#/y, '0x');
+  color = color.replace(/#/y, '0x').replace(/^\((.*)\)$/, "$1");
+  x = x.replace(/^\((.*)\)$/, "$1");
+  y = y.replace(/^\((.*)\)$/, "$1");
 
   var code = "draw_pixel(" + x + ", " + y + ", " + color + ")\n";
   return code;
